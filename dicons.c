@@ -191,6 +191,20 @@ static void activate_cb(GtkIconView *icon_view, GtkTreePath *tree_path, gpointer
     launch_default_or_app_for_file(file);
 }
 
+static char *get_font_color() {
+    const char *env = getenv("DIRICONS_FONT_COLOR");
+    if(!env)
+	return NULL;
+    
+    char *str = (char *)malloc(255);
+    if(!str)
+	return NULL;
+	
+    snprintf(str, 254, "* { background-color: rgba(0, 0, 0, 0); color: %s; }", env);
+    return str;
+}
+
+
 // Function to create a new window
 static GtkWidget *window_new(GtkApplication *app, GtkListStore *model) {
     GtkWidget *window, *icon_view;
@@ -211,8 +225,18 @@ static GtkWidget *window_new(GtkApplication *app, GtkListStore *model) {
 
     // Replace deprecated function with CSS
     GtkCssProvider *provider = gtk_css_provider_new();
-    gtk_css_provider_load_from_data(provider,
+    
+    char *font_color = get_font_color();
+    if(font_color)
+    {
+        gtk_css_provider_load_from_data(provider,font_color, -1, NULL);
+	free(font_color);
+    }
+    else{
+	gtk_css_provider_load_from_data(provider,
         "* { background-color: rgba(0, 0, 0, 0); }", -1, NULL);
+    }
+        
     gtk_style_context_add_provider(gtk_widget_get_style_context(icon_view),
         GTK_STYLE_PROVIDER(provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     gtk_style_context_add_provider(gtk_widget_get_style_context(window),

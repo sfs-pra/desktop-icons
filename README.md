@@ -14,6 +14,7 @@
 - [ ] Thumbnails for Images/Documents
 - [ ] Sort Rows of List Store based on Name/Type/Date
 - [ ] Context-Menu for creating files
+- [X] Optional text color change via environment variable : DIRICONS_FONT_COLOR=#338855 dicons
 
 ## Supported Desktops
 
